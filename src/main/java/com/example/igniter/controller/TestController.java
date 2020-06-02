@@ -1,7 +1,6 @@
 package com.example.igniter.controller;
 
 import com.example.igniter.model.TestObject;
-import com.example.igniter.repository.TestDao;
 import com.example.igniter.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +18,6 @@ public class TestController {
 
     @Autowired
     TestService testService;
-
-    @RequestMapping("/addTestData")
-    @ResponseBody
-    public ResponseEntity addTestData()
-    {
-        testService.addTestData();
-        return new ResponseEntity("Data added.", null, HttpStatus.ACCEPTED);
-    }
 
     @RequestMapping("/returnAll")
     @ResponseBody
