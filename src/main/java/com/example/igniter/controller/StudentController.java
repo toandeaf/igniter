@@ -33,6 +33,4 @@ public class StudentController {
     {
         return studentService.getStudentById(id);
     }
-
-
 }

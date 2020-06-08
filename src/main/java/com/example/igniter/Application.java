@@ -1,7 +1,5 @@
 package com.example.igniter;
 
-import com.example.igniter.config.CacheConfig;
-import org.apache.ignite.IgniteSpringBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

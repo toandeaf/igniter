@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class StudentService {
 
     Logger logger = LoggerFactory.getLogger(StudentService.class);
@@ -33,7 +35,7 @@ public class StudentService {
     public List<Student> returnAllStudents()
     {
         ignite.compute(ignite.cluster().forServers()).broadcast(new TaskRunner());
-        logger.info("We aint cacheing!");
+        logger.info("Loading all.");
         return studentDao.findAll();
     }
 }

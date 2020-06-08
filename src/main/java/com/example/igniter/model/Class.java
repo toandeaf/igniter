@@ -8,8 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name="class")
-@Cacheable
-@org.hibernate.annotations.Cache(usage= CacheConcurrencyStrategy.READ_ONLY, region = "class")
+@org.hibernate.annotations.Cache(usage= CacheConcurrencyStrategy.TRANSACTIONAL, region = "short-cache")
 public class Class {
 
     @Id
@@ -23,7 +22,7 @@ public class Class {
             name = "class_choices",
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "student")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL, region = "short-cache")
     private List<Student> students;
 
     public String getId() {

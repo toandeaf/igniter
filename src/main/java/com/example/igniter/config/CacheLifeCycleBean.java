@@ -6,8 +6,10 @@ import com.example.igniter.util.TaskRunner;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.cache.hibernate.HibernateCacheProxy;
+import org.apache.ignite.cache.store.CacheStoreSession;
 import org.apache.ignite.lifecycle.LifecycleBean;
 import org.apache.ignite.lifecycle.LifecycleEventType;
+import org.apache.ignite.resources.CacheStoreSessionResource;
 import org.apache.ignite.resources.IgniteInstanceResource;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 import javax.cache.integration.CacheLoader;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CacheLifeCycleBean implements LifecycleBean, ApplicationListener<ApplicationReadyEvent>
@@ -35,8 +38,12 @@ public class CacheLifeCycleBean implements LifecycleBean, ApplicationListener<Ap
     @Autowired
     StudentDao studentDao;
 
-    @Autowired
-    Ignite springIgnite;
+    @CacheStoreSessionResource
+    CacheStoreSession session;
+
+//    @Autowired
+//    Ignite springIgnite;
+
 
     @Override
     public void onLifecycleEvent(LifecycleEventType lifecycleEventType) throws IgniteException
@@ -48,7 +55,7 @@ public class CacheLifeCycleBean implements LifecycleBean, ApplicationListener<Ap
         else if (lifecycleEventType == LifecycleEventType.AFTER_NODE_START)
         {
             // TODO implement cacheLoader functionality
-            ignite.compute(ignite.cluster().forServers()).broadcast(new TaskRunner());
+            //ignite.compute(ignite.cluster().forServers()).broadcast(new TaskRunner());
             logger.info("Loading cache data.");
         }
         else if (lifecycleEventType == LifecycleEventType.BEFORE_NODE_STOP)
@@ -70,7 +77,6 @@ public class CacheLifeCycleBean implements LifecycleBean, ApplicationListener<Ap
 
     public void loadCache()
     {
-        studentDao.findAll();
-        springIgnite.compute(springIgnite.cluster().forServers()).broadcast(new TaskRunner());
+
     }
 }
