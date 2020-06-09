@@ -2,13 +2,14 @@ package com.example.igniter.config;
 
 
 import org.apache.ignite.Ignite;
-import org.apache.ignite.IgniteCheckedException;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
-import org.apache.ignite.configuration.*;
-import org.apache.ignite.lifecycle.LifecycleBean;
+import org.apache.ignite.configuration.CacheConfiguration;
+import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.configuration.TransactionConfiguration;
+import org.apache.ignite.spi.discovery.DiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 import org.apache.ignite.transactions.spring.SpringTransactionManager;
@@ -28,7 +29,6 @@ public class CacheConfig {
         return Ignition.start(igniteConfiguration());
     }
 
-    @Bean
     public IgniteConfiguration igniteConfiguration()
     {
         IgniteConfiguration igniteConfiguration = new IgniteConfiguration();
@@ -37,30 +37,39 @@ public class CacheConfig {
         igniteConfiguration.setClientMode(true);
         igniteConfiguration.setMetricsLogFrequency(0);
 
-        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-        ipFinder.setAddresses(Collections.singletonList("127.0.0.1:47500..47509"));
-        igniteConfiguration.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(ipFinder));
+        igniteConfiguration.setDiscoverySpi(discoverySpi());
 
-        LifecycleBean lifecycleBean = new CacheLifeCycleBean();
-        igniteConfiguration.setLifecycleBeans(lifecycleBean);
+        igniteConfiguration.setLifecycleBeans(new CacheLifeCycleBean());
 
-        TransactionConfiguration transConfig = new TransactionConfiguration();
-        transConfig.setTxManagerFactory(FactoryBuilder.factoryOf(SpringTransactionManager.class));
-        igniteConfiguration.setTransactionConfiguration(transConfig);
+        igniteConfiguration.setTransactionConfiguration(transactionConfiguration());
 
+        igniteConfiguration.setCacheConfiguration(shortCacheConfiguration());
+
+        return igniteConfiguration;
+    }
+
+    private CacheConfiguration shortCacheConfiguration()
+    {
         CacheConfiguration cacheConfigClass = new CacheConfiguration();
         cacheConfigClass.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
         cacheConfigClass.setCacheMode(CacheMode.REPLICATED);
-
-        // TODO decide whether write through or write behind is suitable.
-        // Cannot enable write-through (writer or store is not provided) for cache: class
-        // cacheConfigClass.setWriteThrough(true);
         cacheConfigClass.setWriteSynchronizationMode(CacheWriteSynchronizationMode.FULL_ASYNC);
         cacheConfigClass.setName("short-cache");
         cacheConfigClass.setDataRegionName("short-cache-region");
+        return cacheConfigClass;
+    }
 
-        igniteConfiguration.setCacheConfiguration(cacheConfigClass);
+    private TransactionConfiguration transactionConfiguration()
+    {
+        TransactionConfiguration transConfig = new TransactionConfiguration();
+        transConfig.setTxManagerFactory(FactoryBuilder.factoryOf(SpringTransactionManager.class));
+        return transConfig;
+    }
 
-        return igniteConfiguration;
+    private DiscoverySpi discoverySpi()
+    {
+        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
+        ipFinder.setAddresses(Collections.singletonList("127.0.0.1:47500..47509"));
+        return new TcpDiscoverySpi().setIpFinder(ipFinder);
     }
 }

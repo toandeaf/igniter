@@ -19,6 +19,7 @@ package org.apache.ignite.cache.hibernate;
 
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCheckedException;
+import org.apache.ignite.cache.hibernate.HibernateCacheProxy;
 import org.hibernate.cache.CacheException;
 import org.hibernate.cache.spi.ExtendedStatisticsSupport;
 import org.hibernate.cache.spi.Region;

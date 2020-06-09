@@ -1,14 +1,14 @@
 package com.example.igniter.model;
 
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.cache.annotation.Cacheable;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="class")
-@org.hibernate.annotations.Cache(usage= CacheConcurrencyStrategy.TRANSACTIONAL, region = "short-cache")
+@Cache(usage= CacheConcurrencyStrategy.TRANSACTIONAL, region = "short-cache")
 public class Class {
 
     @Id

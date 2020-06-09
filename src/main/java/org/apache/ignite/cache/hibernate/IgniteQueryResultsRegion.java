@@ -34,7 +34,7 @@ import org.hibernate.query.Query;
  *     &lt;property name="cache.use_second_level_cache"&gt;true&lt;/property&gt;
 
  *     &lt;!-- Use Ignite as L2 cache provider. --&gt;
- *     &lt;property name="cache.region.factory_class"&gt;org.apache.ignite.org.apache.ignite.cache.hibernate.HibernateRegionFactory&lt;/property&gt;
+ *     &lt;property name="cache.region.factory_class"&gt;org.apache.ignite.cache.hibernate.HibernateRegionFactory&lt;/property&gt;
  *
  *     &lt;!-- Specify entity. --&gt;
  *     &lt;mapping class="com.example.Entity"/&gt;

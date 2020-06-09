@@ -43,7 +43,7 @@ import static org.hibernate.cache.spi.access.AccessType.NONSTRICT_READ_WRITE;
  * region factory for caching:
  * <pre name="code" class="brush: xml; gutter: false;">
  * hibernate.cache.use_second_level_cache=true
- * hibernate.cache.region.factory_class=org.apache.ignite.org.apache.ignite.cache.hibernate.HibernateRegionFactory
+ * hibernate.cache.region.factory_class=org.apache.ignite.cache.hibernate.HibernateRegionFactory
  * </pre>
  * Note that before region factory is started you need to start properly configured Ignite node in the same JVM.
  * For example to start Ignite node one of loader provided in {@code org.apache.ignite.grid.startup} package can be used.
